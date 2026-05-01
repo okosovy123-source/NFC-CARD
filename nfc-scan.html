@@ -496,15 +496,14 @@
 </div>
 
 <script>
-  // ── JSONBin credentials (wypełniane automatycznie przez nfc-admin.html) ──
-  const JSONBIN_KEY = '%%JSONBIN_KEY%%';
-  const JSONBIN_BIN = '%%JSONBIN_BIN%%';
+  // ── JSONBin credentials — ładowane z config.json ──
+  let _jbKey = '', _jbBin = '';
 
   // ── Zapisz skan do JSONBin ──
   function recordScan(cardId) {
-    if (!JSONBIN_KEY || !JSONBIN_BIN || JSONBIN_KEY.startsWith('%%')) return;
-    fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN}/latest`, {
-      headers: { 'X-Master-Key': JSONBIN_KEY }
+    if (!_jbKey || !_jbBin) return;
+    fetch(`https://api.jsonbin.io/v3/b/${_jbBin}/latest`, {
+      headers: { 'X-Master-Key': _jbKey }
     })
     .then(r => r.json())
     .then(data => {
@@ -514,9 +513,9 @@
         count: prev.count + 1,
         last: new Date().toISOString()
       };
-      return fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN}`, {
+      return fetch(`https://api.jsonbin.io/v3/b/${_jbBin}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_KEY },
+        headers: { 'Content-Type': 'application/json', 'X-Master-Key': _jbKey },
         body: JSON.stringify({ scans })
       });
     })
@@ -602,9 +601,19 @@
     const cardId = getCardId();
     if (!cardId || cardId < 1 || cardId > 100) { showError(); return; }
 
-    fetch('./codes.json')
+    // Pobierz config.json (klucze JSONBin) i codes.json równocześnie
+    const configPromise = fetch('./config.json')
       .then(r => r.json())
-      .then(codes => {
+      .then(cfg => {
+        _jbKey = cfg.jsonbin_key || '';
+        _jbBin = cfg.jsonbin_bin || '';
+      })
+      .catch(() => {});
+
+    const codesPromise = fetch('./codes.json').then(r => r.json());
+
+    Promise.all([configPromise, codesPromise])
+      .then(([, codes]) => {
         const code = codes[String(cardId)];
         if (!code || !code.trim()) { showError(); return; }
         showReveal(code.trim(), cardId);

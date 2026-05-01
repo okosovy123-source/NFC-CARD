@@ -207,6 +207,10 @@
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
       Pobierz codes.json
     </button>
+    <button class="btn green" onclick="exportConfig()" title="Eksportuje config.json z kluczami JSONBin — wgraj na GitHub">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Pobierz config.json
+    </button>
     <button class="btn" onclick="generateScanPage()" title="Generuje nfc-scan.html z wbudowanymi kluczami JSONBin">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
       Generuj nfc-scan.html
@@ -582,6 +586,16 @@
     };
     reader.readAsText(file);
     input.value = ''; // reset żeby można było wybrać ten sam plik znowu
+  }
+
+  // ── Export config.json (klucze JSONBin) ──
+  function exportConfig() {
+    const key = getJbKey(), bin = getJbBin();
+    if (!key || !bin) { toast('Najpierw skonfiguruj JSONBin ↑'); return; }
+    const obj = { jsonbin_key: key, jsonbin_bin: bin };
+    const blob = new Blob([JSON.stringify(obj, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'config.json'; a.click();
+    toast('Pobrano config.json → wgraj na GitHub ✓');
   }
 
   // ── Export codes.json ──
