@@ -342,11 +342,11 @@
       </svg>
       Importuj listę
     </button>
-    <button class="btn" onclick="exportCodes()">
+    <button class="btn primary" onclick="exportJson()" style="background:#a8f0c6;color:#000;border-color:transparent">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
       </svg>
-      Eksportuj
+      Pobierz codes.json
     </button>
     <button class="btn primary" onclick="saveAll()">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -571,18 +571,17 @@
     toast(`Zaimportowano ${lines.length > 100 ? 100 : lines.length} kodów ✓`);
   }
 
-  // ── Export ──
-  function exportCodes() {
+  // ── Export codes.json (wgraj na GitHub zamiast starego pliku) ──
+  function exportJson() {
     collectInputs();
-    const lines = [];
-    for (let i = 1; i <= 100; i++) {
-      lines.push(`${String(i).padStart(3,'0')}\t${codes[i] || ''}`);
-    }
-    const blob = new Blob([lines.join('\n')], { type: 'text/plain' });
+    const obj = {};
+    for (let i = 1; i <= 100; i++) obj[String(i)] = codes[i] || '';
+    const blob = new Blob([JSON.stringify(obj, null, 2)], { type: 'application/json' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = 'nfc-kody.txt';
+    a.download = 'codes.json';
     a.click();
+    toast('Pobrano codes.json — wgraj go na GitHub ✓');
   }
 
   // ── Toast ──
