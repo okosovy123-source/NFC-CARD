@@ -8,7 +8,7 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
-    background: #0a0a0a;
+    background: #050505;
     color: #fff;
     font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', sans-serif;
     min-height: 100dvh;
@@ -17,132 +17,306 @@
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    position: relative;
+  }
+
+  /* ── Animated background grid ── */
+  .bg-grid {
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 40px 40px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 0%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 0%, transparent 75%);
+    opacity: 0.6;
+    pointer-events: none;
+    animation: gridDrift 18s linear infinite;
+  }
+  @keyframes gridDrift {
+    0% { background-position: 0 0; }
+    100% { background-position: 40px 40px; }
   }
 
   /* ── Ambient glow ── */
   .ambient {
     position: fixed;
     inset: 0;
-    background: radial-gradient(ellipse 70% 50% at 50% 50%, rgba(255,255,255,0.04) 0%, transparent 70%);
+    background:
+      radial-gradient(circle 600px at 50% 50%, rgba(255,255,255,0.08) 0%, transparent 60%),
+      radial-gradient(circle 300px at 30% 30%, rgba(120,180,255,0.06) 0%, transparent 50%),
+      radial-gradient(circle 300px at 70% 70%, rgba(255,180,200,0.04) 0%, transparent 50%);
     pointer-events: none;
+    animation: ambientShift 8s ease-in-out infinite;
+  }
+  @keyframes ambientShift {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
   }
 
-  /* ── Logo ── */
+  /* ── Logo top ── */
   .brand-logo {
     position: fixed;
     top: 32px;
     left: 50%;
     transform: translateX(-50%);
-    height: 28px;
+    height: 32px;
     width: auto;
     filter: invert(1);
-    opacity: 0.85;
+    opacity: 0.95;
     object-fit: contain;
+    z-index: 10;
   }
 
-  /* ── NFC rings ── */
-  .rings-wrap {
-    position: relative;
-    width: 220px;
-    height: 220px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .ring {
-    position: absolute;
-    border-radius: 50%;
-    border: 1.5px solid rgba(255,255,255,0.15);
-    animation: ringPulse 2.4s ease-out infinite;
-    opacity: 0;
-  }
-  .ring:nth-child(1) { width: 80px;  height: 80px;  animation-delay: 0s; }
-  .ring:nth-child(2) { width: 130px; height: 130px; animation-delay: 0.45s; }
-  .ring:nth-child(3) { width: 180px; height: 180px; animation-delay: 0.9s; }
-  .ring:nth-child(4) { width: 230px; height: 230px; animation-delay: 1.35s; }
-
-  @keyframes ringPulse {
-    0%   { transform: scale(0.75); opacity: 0; border-color: rgba(255,255,255,0.5); }
-    25%  { opacity: 1; }
-    100% { transform: scale(1.05); opacity: 0; border-color: rgba(255,255,255,0); }
-  }
-
-  /* ── Card icon ── */
-  .card-icon {
-    width: 54px;
-    height: 54px;
-    position: relative;
-    z-index: 2;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .card-icon img {
-    width: 42px;
-    height: 42px;
-    filter: invert(1);
-    opacity: 0.9;
-    object-fit: contain;
-  }
-
-  .scan-label {
-    margin-top: 36px;
-    font-size: 11px;
-    letter-spacing: 0.28em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.3);
-    animation: fadePulse 2s ease-in-out infinite;
-  }
-
-  @keyframes fadePulse {
-    0%, 100% { opacity: 0.3; }
-    50% { opacity: 0.8; }
-  }
-
-  /* ── Scan phase ── */
+  /* ── SCAN PHASE ── */
   #phase-scan {
     display: flex;
     flex-direction: column;
     align-items: center;
-    transition: opacity 0.6s ease;
+    transition: opacity 0.7s ease, transform 0.7s ease;
   }
 
-  /* ── Reveal phase ── */
+  /* Scanner orb */
+  .scanner {
+    position: relative;
+    width: 320px;
+    height: 320px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Outer rotating ring with gradient */
+  .orbit-ring {
+    position: absolute;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    border: 1px solid transparent;
+    background:
+      conic-gradient(from 0deg, transparent 0%, rgba(255,255,255,0.6) 25%, transparent 50%, rgba(255,255,255,0.3) 75%, transparent 100%) border-box;
+    -webkit-mask:
+      linear-gradient(#fff 0 0) padding-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: orbitRotate 4s linear infinite;
+  }
+  @keyframes orbitRotate {
+    to { transform: rotate(360deg); }
+  }
+
+  /* Pulsing rings */
+  .pulse-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255,255,255,0.4);
+    animation: pulseOut 2.6s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+    opacity: 0;
+  }
+  .pulse-ring:nth-child(2) { width: 100px; height: 100px; animation-delay: 0s; }
+  .pulse-ring:nth-child(3) { width: 100px; height: 100px; animation-delay: 0.65s; }
+  .pulse-ring:nth-child(4) { width: 100px; height: 100px; animation-delay: 1.3s; }
+  .pulse-ring:nth-child(5) { width: 100px; height: 100px; animation-delay: 1.95s; }
+
+  @keyframes pulseOut {
+    0%   { transform: scale(0.5); opacity: 0; border-color: rgba(255,255,255,0.8); border-width: 2px; }
+    20%  { opacity: 1; }
+    100% { transform: scale(2.8); opacity: 0; border-color: rgba(255,255,255,0); border-width: 0.5px; }
+  }
+
+  /* Center logo with glow */
+  .scan-core {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 50%, transparent 75%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+    animation: corePulse 2s ease-in-out infinite;
+    box-shadow:
+      0 0 60px rgba(255,255,255,0.15),
+      inset 0 0 40px rgba(255,255,255,0.05);
+  }
+  @keyframes corePulse {
+    0%, 100% {
+      box-shadow: 0 0 60px rgba(255,255,255,0.15), inset 0 0 40px rgba(255,255,255,0.05);
+      transform: scale(1);
+    }
+    50% {
+      box-shadow: 0 0 100px rgba(255,255,255,0.3), inset 0 0 60px rgba(255,255,255,0.08);
+      transform: scale(1.05);
+    }
+  }
+  .scan-core img {
+    width: 56px;
+    height: 56px;
+    filter: invert(1) drop-shadow(0 0 8px rgba(255,255,255,0.5));
+    animation: logoFloat 3s ease-in-out infinite;
+  }
+  @keyframes logoFloat {
+    0%, 100% { transform: rotate(-2deg) scale(1); }
+    50%      { transform: rotate(2deg) scale(1.04); }
+  }
+
+  /* Particles (dots flying outward) */
+  .particle {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 0 8px rgba(255,255,255,0.8);
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  @keyframes particleFly {
+    0%   { opacity: 0; transform: translate(0, 0) scale(0.5); }
+    10%  { opacity: 1; }
+    100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(0); }
+  }
+
+  /* Sweeping radar line */
+  .radar-sweep {
+    position: absolute;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .radar-sweep::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 50%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.7), transparent);
+    transform-origin: left center;
+    animation: radarSpin 3s linear infinite;
+    box-shadow: 0 0 8px rgba(255,255,255,0.5);
+  }
+  @keyframes radarSpin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+
+  /* Scan label */
+  .scan-label {
+    margin-top: 40px;
+    font-size: 12px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.85);
+    font-weight: 500;
+    position: relative;
+  }
+  .scan-label::after {
+    content: '';
+    display: inline-block;
+    width: 14px;
+    text-align: left;
+    animation: dots 1.6s steps(4, end) infinite;
+  }
+  @keyframes dots {
+    0%   { content: ''; }
+    25%  { content: '.'; }
+    50%  { content: '..'; }
+    75%  { content: '...'; }
+  }
+
+  .scan-sublabel {
+    margin-top: 14px;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    font-weight: 400;
+  }
+
+  /* Big flash on success */
+  .flash {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba(255,255,255,0.9) 0%, transparent 60%);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 100;
+  }
+  .flash.fire {
+    animation: flashBoom 0.8s ease-out forwards;
+  }
+  @keyframes flashBoom {
+    0%   { opacity: 0; }
+    20%  { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  /* ── REVEAL PHASE ── */
   #phase-reveal {
     display: none;
     flex-direction: column;
     align-items: center;
-    gap: 24px;
+    gap: 28px;
     padding: 0 24px;
     width: 100%;
-    max-width: 380px;
-    animation: revealIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+    max-width: 400px;
+    animation: revealIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
 
   @keyframes revealIn {
-    from { opacity: 0; transform: translateY(28px) scale(0.95); }
+    from { opacity: 0; transform: translateY(40px) scale(0.94); }
     to   { opacity: 1; transform: translateY(0) scale(1); }
   }
 
   .reveal-label {
-    font-size: 10px;
-    letter-spacing: 0.3em;
+    font-size: 11px;
+    letter-spacing: 0.35em;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.25);
+    color: rgba(255,255,255,0.75);
+    font-weight: 600;
+    animation: labelFadeIn 0.6s 0.2s both;
   }
 
-  /* ── Code box ── */
+  @keyframes labelFadeIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Code box */
   .code-box {
     position: relative;
     width: 100%;
-    padding: 32px 40px 28px;
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 20px;
-    background: rgba(255,255,255,0.03);
+    padding: 36px 32px 30px;
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 22px;
+    background:
+      linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%);
     text-align: center;
     overflow: hidden;
+    backdrop-filter: blur(10px);
+    box-shadow:
+      0 20px 60px rgba(0,0,0,0.5),
+      inset 0 1px 0 rgba(255,255,255,0.1);
   }
+
+  .code-box::before {
+    content: '';
+    position: absolute;
+    top: -2px; left: -2px; right: -2px; bottom: -2px;
+    border-radius: 22px;
+    background: conic-gradient(from 0deg, transparent, rgba(255,255,255,0.3), transparent 30%);
+    animation: borderRotate 4s linear infinite;
+    z-index: -1;
+    opacity: 0.4;
+  }
+  @keyframes borderRotate { to { transform: rotate(360deg); } }
 
   .code-box::after {
     content: '';
@@ -150,8 +324,8 @@
     top: 0; left: -100%;
     width: 50%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
-    animation: shimmer 3s 0.5s ease-in-out infinite;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+    animation: shimmer 3s 0.8s ease-in-out infinite;
   }
 
   @keyframes shimmer {
@@ -160,86 +334,87 @@
   }
 
   .code-value {
-    font-size: clamp(30px, 9vw, 46px);
-    font-weight: 600;
-    letter-spacing: 0.1em;
+    font-size: clamp(32px, 9vw, 48px);
+    font-weight: 700;
+    letter-spacing: 0.08em;
     color: #fff;
     font-variant-numeric: tabular-nums;
-    animation: glitchReveal 0.6s 0.05s both;
+    text-shadow: 0 0 30px rgba(255,255,255,0.3);
+    animation: codeReveal 0.7s 0.1s both;
+    word-break: break-all;
   }
 
-  @keyframes glitchReveal {
-    0%  { clip-path: inset(100% 0 0 0); opacity: 0; }
-    35% { clip-path: inset(0% 0 65% 0); opacity: 1; }
-    55% { clip-path: inset(35% 0 0% 0); }
-    75% { clip-path: inset(0% 0 15% 0); }
-    100%{ clip-path: inset(0); opacity: 1; }
+  @keyframes codeReveal {
+    0%   { clip-path: inset(100% 0 0 0); opacity: 0; filter: blur(8px); }
+    30%  { clip-path: inset(0% 0 60% 0); opacity: 1; filter: blur(2px); }
+    50%  { clip-path: inset(40% 0 0% 0); filter: blur(4px); }
+    70%  { clip-path: inset(0% 0 20% 0); filter: blur(1px); }
+    100% { clip-path: inset(0); opacity: 1; filter: blur(0); }
   }
 
   .code-sublabel {
-    margin-top: 10px;
-    font-size: 10px;
-    letter-spacing: 0.2em;
+    margin-top: 14px;
+    font-size: 11px;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.55);
+    font-weight: 500;
+    animation: labelFadeIn 0.6s 0.5s both;
   }
 
-  /* ── Actions ── */
+  /* Buttons */
   .actions {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
     width: 100%;
+    animation: labelFadeIn 0.6s 0.4s both;
   }
 
   .btn-blindbox {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 10px;
     background: #fff;
     color: #000;
     border: none;
     border-radius: 14px;
-    padding: 16px 24px;
+    padding: 18px 24px;
     font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 0.06em;
+    font-weight: 700;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     cursor: pointer;
     text-decoration: none;
-    transition: opacity 0.2s, transform 0.15s;
+    transition: all 0.2s;
     -webkit-tap-highlight-color: transparent;
+    box-shadow: 0 8px 24px rgba(255,255,255,0.1);
   }
   .btn-blindbox:active { opacity: 0.85; transform: scale(0.98); }
+  .btn-blindbox:hover  { box-shadow: 0 12px 32px rgba(255,255,255,0.2); }
 
   .btn-copy {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.15);
     border-radius: 14px;
     padding: 14px 24px;
     font-size: 13px;
-    color: rgba(255,255,255,0.5);
-    letter-spacing: 0.05em;
+    color: rgba(255,255,255,0.75);
+    letter-spacing: 0.06em;
     cursor: pointer;
     transition: all 0.2s;
     -webkit-tap-highlight-color: transparent;
+    font-weight: 500;
   }
-  .btn-copy:active { background: rgba(255,255,255,0.06); transform: scale(0.98); }
-  .btn-copy.copied { color: #a8f0c6; border-color: rgba(168,240,198,0.25); }
+  .btn-copy:active { background: rgba(255,255,255,0.1); transform: scale(0.98); }
+  .btn-copy.copied { color: #a8f0c6; border-color: rgba(168,240,198,0.4); background: rgba(168,240,198,0.08); }
 
-  .card-num {
-    font-size: 10px;
-    color: rgba(255,255,255,0.15);
-    letter-spacing: 0.15em;
-    margin-top: 8px;
-  }
-
-  /* ── Error ── */
+  /* Error */
   #phase-error {
     display: none;
     flex-direction: column;
@@ -248,16 +423,16 @@
     text-align: center;
     padding: 0 40px;
   }
-  .error-icon { font-size: 36px; opacity: 0.4; }
-  .error-title { font-size: 17px; font-weight: 500; }
-  .error-sub { font-size: 13px; color: rgba(255,255,255,0.3); line-height: 1.6; }
+  .error-icon { font-size: 36px; opacity: 0.5; }
+  .error-title { font-size: 17px; font-weight: 600; letter-spacing: 0.05em; }
+  .error-sub { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.6; }
 </style>
 </head>
 <body>
 
+<div class="bg-grid"></div>
 <div class="ambient"></div>
 
-<!-- Logo centered top -->
 <img
   class="brand-logo"
   src="https://desired.studio/cdn/shop/files/czarne_logo.png?v=1766258696&width=400"
@@ -267,13 +442,14 @@
 
 <!-- FAZA 1: skanowanie -->
 <div id="phase-scan">
-  <div class="rings-wrap">
-    <div class="ring"></div>
-    <div class="ring"></div>
-    <div class="ring"></div>
-    <div class="ring"></div>
-    <div class="card-icon">
-      <!-- Logo w centrum animacji -->
+  <div class="scanner">
+    <div class="orbit-ring"></div>
+    <div class="radar-sweep"></div>
+    <div class="pulse-ring"></div>
+    <div class="pulse-ring"></div>
+    <div class="pulse-ring"></div>
+    <div class="pulse-ring"></div>
+    <div class="scan-core">
       <img
         src="https://desired.studio/cdn/shop/files/czarne_logo.png?v=1766258696&width=200"
         alt=""
@@ -281,8 +457,12 @@
       >
     </div>
   </div>
-  <p class="scan-label">Odczytywanie karty</p>
+  <p class="scan-label">Łączenie z kartą</p>
+  <p class="scan-sublabel">Trwa odczyt</p>
 </div>
+
+<!-- FLASH na success -->
+<div class="flash" id="flash"></div>
 
 <!-- FAZA 2: kod -->
 <div id="phase-reveal">
@@ -304,8 +484,6 @@
       Kopiuj kod
     </button>
   </div>
-
-  <p class="card-num" id="cardChip"></p>
 </div>
 
 <!-- FAZA 3: błąd -->
@@ -316,10 +494,60 @@
 </div>
 
 <script>
+  // ── JSONBin credentials (wypełniane automatycznie przez nfc-admin.html) ──
+  const JSONBIN_KEY = '%%JSONBIN_KEY%%';
+  const JSONBIN_BIN = '%%JSONBIN_BIN%%';
+
+  // ── Zapisz skan do JSONBin ──
+  function recordScan(cardId) {
+    if (!JSONBIN_KEY || !JSONBIN_BIN || JSONBIN_KEY.startsWith('%%')) return;
+    fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN}/latest`, {
+      headers: { 'X-Master-Key': JSONBIN_KEY }
+    })
+    .then(r => r.json())
+    .then(data => {
+      const scans = data.record?.scans || {};
+      const prev = scans[String(cardId)] || { count: 0 };
+      scans[String(cardId)] = {
+        count: prev.count + 1,
+        last: new Date().toISOString()
+      };
+      return fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_KEY },
+        body: JSON.stringify({ scans })
+      });
+    })
+    .catch(() => {});
+  }
+
   function getCardId() {
     const p = new URLSearchParams(window.location.search);
     const id = p.get('id') || p.get('card') || p.get('k');
     return id ? parseInt(id, 10) : null;
+  }
+
+  // ── Particle burst on success ──
+  function spawnParticles() {
+    const scanner = document.querySelector('.scanner');
+    if (!scanner) return;
+    const center = scanner.getBoundingClientRect();
+    const cx = center.left + center.width / 2;
+    const cy = center.top + center.height / 2;
+
+    for (let i = 0; i < 24; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      const angle = (Math.PI * 2 * i) / 24 + (Math.random() * 0.3);
+      const dist = 180 + Math.random() * 120;
+      p.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
+      p.style.setProperty('--ty', Math.sin(angle) * dist + 'px');
+      p.style.left = cx + 'px';
+      p.style.top = cy + 'px';
+      p.style.animation = `particleFly ${0.7 + Math.random() * 0.4}s ease-out forwards`;
+      document.body.appendChild(p);
+      setTimeout(() => p.remove(), 1200);
+    }
   }
 
   function copyCode() {
@@ -338,16 +566,23 @@
 
   function showReveal(code, cardId) {
     document.getElementById('codeValue').textContent = code;
-    document.getElementById('cardChip').textContent = `Karta #${String(cardId).padStart(3,'0')}`;
+    recordScan(cardId);
+
+    // FLASH + particles przed revealem
     setTimeout(() => {
+      spawnParticles();
+      document.getElementById('flash').classList.add('fire');
+
       const scan = document.getElementById('phase-scan');
       scan.style.opacity = '0';
+      scan.style.transform = 'scale(1.15)';
       scan.style.pointerEvents = 'none';
+
       setTimeout(() => {
         scan.style.display = 'none';
         document.getElementById('phase-reveal').style.display = 'flex';
-      }, 600);
-    }, 1800);
+      }, 700);
+    }, 2200);
   }
 
   function showError() {
@@ -358,7 +593,7 @@
         scan.style.display = 'none';
         document.getElementById('phase-error').style.display = 'flex';
       }, 600);
-    }, 1800);
+    }, 2200);
   }
 
   window.addEventListener('DOMContentLoaded', () => {

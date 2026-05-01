@@ -18,308 +18,173 @@
     --accent: #ffffff;
     --green: #a8f0c6;
     --red: #f08080;
+    --orange: #f0c080;
   }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', sans-serif;
-    min-height: 100vh;
-  }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', sans-serif; min-height: 100vh; }
 
-  /* ── Header ── */
   header {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: rgba(13,13,13,0.92);
-    backdrop-filter: blur(20px);
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(13,13,13,0.95); backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--border);
-    padding: 18px 28px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    flex-wrap: wrap;
+    padding: 16px 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
   }
+  .header-title { font-size: 15px; font-weight: 600; letter-spacing: 0.04em; flex: 1; }
+  .header-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
 
-  .header-title {
-    font-size: 15px;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    flex: 1;
-  }
+  .controls { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 
-  .header-sub {
-    font-size: 12px;
-    color: var(--muted);
-    margin-top: 2px;
-  }
-
-  /* ── Top controls ── */
-  .controls {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-
-  .search-wrap {
-    position: relative;
-  }
-  .search-wrap svg {
-    position: absolute;
-    left: 11px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--muted);
-    pointer-events: none;
-  }
+  .search-wrap { position: relative; }
+  .search-wrap svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
   .search-input {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 9px 14px 9px 36px;
-    color: var(--text);
-    font-size: 13px;
-    width: 200px;
-    outline: none;
-    transition: border-color 0.15s;
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 8px;
+    padding: 8px 12px 8px 34px; color: var(--text); font-size: 13px; width: 190px;
+    outline: none; transition: border-color 0.15s;
   }
   .search-input:focus { border-color: var(--border-hover); }
   .search-input::placeholder { color: var(--muted); }
 
   .btn {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 9px 16px;
-    color: var(--text);
-    font-size: 13px;
-    cursor: pointer;
-    transition: all 0.15s;
-    white-space: nowrap;
-    display: flex;
-    align-items: center;
-    gap: 6px;
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 8px;
+    padding: 8px 14px; color: var(--text); font-size: 13px; cursor: pointer;
+    transition: all 0.15s; white-space: nowrap; display: flex; align-items: center; gap: 6px;
   }
-  .btn:hover { border-color: var(--border-hover); background: var(--surface); }
-  .btn.primary {
-    background: var(--accent);
-    color: #000;
-    border-color: transparent;
-    font-weight: 600;
-  }
+  .btn:hover { border-color: var(--border-hover); }
+  .btn.primary { background: var(--accent); color: #000; border-color: transparent; font-weight: 600; }
   .btn.primary:hover { background: rgba(255,255,255,0.85); }
+  .btn.green { background: var(--green); color: #000; border-color: transparent; font-weight: 600; }
+  .btn.green:hover { background: #8de0b0; }
   .btn.danger { color: var(--red); border-color: rgba(240,128,128,0.2); }
   .btn.danger:hover { background: rgba(240,128,128,0.08); }
 
   /* ── Stats bar ── */
   .stats {
-    padding: 14px 28px;
-    display: flex;
-    gap: 24px;
-    border-bottom: 1px solid var(--border);
-    font-size: 12px;
+    padding: 12px 24px; display: flex; gap: 20px; align-items: center;
+    border-bottom: 1px solid var(--border); font-size: 12px; flex-wrap: wrap;
   }
   .stat { display: flex; gap: 6px; align-items: center; }
   .stat-num { font-weight: 700; font-size: 14px; }
   .stat-num.filled { color: var(--green); }
   .stat-num.empty { color: var(--muted); }
 
-  /* ── Import modal ── */
-  .modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.7);
-    backdrop-filter: blur(4px);
-    z-index: 200;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
+  /* ── JSONBin setup bar ── */
+  .jb-bar {
+    padding: 10px 24px; border-bottom: 1px solid var(--border);
+    background: rgba(168,240,198,0.03);
+    display: flex; gap: 10px; align-items: center; flex-wrap: wrap; font-size: 12px;
   }
-  .modal-overlay.open { display: flex; }
+  .jb-bar label { color: var(--muted); white-space: nowrap; }
+  .jb-input {
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 6px;
+    padding: 5px 10px; color: var(--text); font-size: 12px; font-family: monospace;
+    outline: none; transition: border-color 0.15s;
+  }
+  .jb-input:focus { border-color: var(--border-hover); }
+  .jb-input::placeholder { color: rgba(255,255,255,0.2); }
+  .jb-status { font-size: 11px; color: var(--muted); padding: 4px 10px; border-radius: 20px; background: var(--surface2); white-space: nowrap; }
+  .jb-status.ok { color: var(--green); background: rgba(168,240,198,0.08); }
+  .jb-status.err { color: var(--red); background: rgba(240,128,128,0.08); }
 
-  .modal {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 28px;
-    width: 100%;
-    max-width: 520px;
-    animation: modalIn 0.25s cubic-bezier(0.16,1,0.3,1);
+  /* ── URL bar ── */
+  .url-bar {
+    padding: 8px 24px; border-bottom: 1px solid var(--border);
+    display: flex; gap: 10px; align-items: center; flex-wrap: wrap; font-size: 12px;
   }
-  @keyframes modalIn {
-    from { opacity: 0; transform: translateY(12px) scale(0.97); }
-    to   { opacity: 1; transform: translateY(0) scale(1); }
+  .url-bar label { color: var(--muted); white-space: nowrap; }
+  .url-input {
+    flex: 1; min-width: 260px; background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 6px; padding: 5px 10px; color: var(--text); font-size: 12px;
+    font-family: monospace; outline: none; transition: border-color 0.15s;
   }
-  .modal h2 { font-size: 16px; margin-bottom: 8px; }
-  .modal p  { font-size: 13px; color: var(--muted); margin-bottom: 16px; line-height: 1.5; }
-
-  .import-textarea {
-    width: 100%;
-    height: 180px;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 12px;
-    color: var(--text);
-    font-size: 13px;
-    font-family: 'SF Mono', 'Fira Code', monospace;
-    resize: vertical;
-    outline: none;
-    line-height: 1.6;
-  }
-  .import-textarea:focus { border-color: var(--border-hover); }
-  .import-textarea::placeholder { color: rgba(255,255,255,0.2); }
-
-  .modal-footer {
-    display: flex;
-    gap: 10px;
-    margin-top: 16px;
-    justify-content: flex-end;
-  }
+  .url-input:focus { border-color: var(--border-hover); }
 
   /* ── Grid ── */
-  .grid-wrap {
-    padding: 24px 28px;
-    max-width: 1400px;
-    margin: 0 auto;
-  }
+  .grid-wrap { padding: 20px 24px; max-width: 1400px; margin: 0 auto; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
 
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 12px;
-  }
-
-  /* ── Card slot ── */
+  /* ── Slot ── */
   .slot {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    transition: border-color 0.15s, background 0.15s;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+    padding: 14px; display: flex; flex-direction: column; gap: 8px;
+    transition: border-color 0.15s;
   }
   .slot:hover { border-color: var(--border-hover); }
   .slot.has-code { border-color: rgba(168,240,198,0.15); }
-  .slot.highlight { border-color: rgba(255,255,255,0.4) !important; background: rgba(255,255,255,0.03); }
   .slot.hidden-slot { display: none; }
 
-  .slot-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .slot-num {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.15em;
-    color: var(--muted);
-  }
-  .slot-status {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.1);
-    transition: background 0.2s;
-  }
+  .slot-header { display: flex; align-items: center; justify-content: space-between; }
+  .slot-num { font-size: 11px; font-weight: 700; letter-spacing: 0.15em; color: var(--muted); }
+  .slot-status { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.1); transition: background 0.2s; }
   .slot.has-code .slot-status { background: var(--green); }
 
   .slot-input {
-    background: var(--bg);
-    border: 1px solid transparent;
-    border-radius: 8px;
-    padding: 9px 11px;
-    color: var(--text);
-    font-size: 14px;
-    font-weight: 500;
-    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
-    letter-spacing: 0.06em;
-    width: 100%;
-    outline: none;
-    transition: border-color 0.15s, background 0.15s;
+    background: var(--bg); border: 1px solid transparent; border-radius: 8px;
+    padding: 8px 10px; color: var(--text); font-size: 14px; font-weight: 500;
+    font-family: 'SF Mono', 'Fira Code', monospace; letter-spacing: 0.06em;
+    width: 100%; outline: none; transition: border-color 0.15s, background 0.15s;
   }
-  .slot-input:focus {
-    border-color: var(--border-hover);
-    background: var(--surface2);
-  }
+  .slot-input:focus { border-color: var(--border-hover); background: var(--surface2); }
   .slot-input::placeholder { color: rgba(255,255,255,0.15); font-weight: 400; letter-spacing: 0; font-family: inherit; }
 
-  .slot-actions {
-    display: flex;
-    gap: 6px;
+  /* ── Scan badge ── */
+  .scan-badge {
+    font-size: 10px; color: var(--muted); display: flex; align-items: center;
+    gap: 5px; min-height: 16px;
   }
+  .scan-badge.scanned { color: var(--green); }
+  .scan-badge.scanned svg { color: var(--green); }
+  .scan-badge svg { opacity: 0.5; }
+  .scan-count { font-weight: 700; margin-right: 2px; }
+
+  .slot-actions { display: flex; gap: 6px; }
   .slot-link {
-    flex: 1;
-    font-size: 11px;
-    color: var(--muted);
-    background: var(--surface2);
-    border: 1px solid transparent;
-    border-radius: 6px;
-    padding: 6px 9px;
-    cursor: pointer;
-    transition: all 0.15s;
-    text-align: center;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    text-decoration: none;
+    flex: 1; font-size: 11px; color: var(--muted); background: var(--surface2);
+    border: 1px solid transparent; border-radius: 6px; padding: 5px 8px;
+    cursor: pointer; transition: all 0.15s; text-align: center;
+    display: flex; align-items: center; justify-content: center; gap: 4px; text-decoration: none;
   }
   .slot-link:hover { color: var(--text); border-color: var(--border); }
-
   .slot-copy-link {
-    font-size: 11px;
-    color: var(--muted);
-    background: var(--surface2);
-    border: 1px solid transparent;
-    border-radius: 6px;
-    padding: 6px 9px;
-    cursor: pointer;
-    transition: all 0.15s;
-    white-space: nowrap;
-    display: flex;
-    align-items: center;
-    gap: 4px;
+    font-size: 11px; color: var(--muted); background: var(--surface2);
+    border: 1px solid transparent; border-radius: 6px; padding: 5px 8px;
+    cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 4px;
   }
   .slot-copy-link:hover { color: var(--text); border-color: var(--border); }
   .slot-copy-link.ok { color: var(--green); }
 
-  /* ── Toast ── */
-  #toast {
-    position: fixed;
-    bottom: 28px;
-    left: 50%;
-    transform: translateX(-50%) translateY(80px);
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 50px;
-    padding: 12px 22px;
-    font-size: 13px;
-    color: var(--text);
-    z-index: 500;
-    transition: transform 0.3s cubic-bezier(0.16,1,0.3,1);
-    white-space: nowrap;
-    pointer-events: none;
+  /* ── Modal ── */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(4px); z-index: 200; align-items: center; justify-content: center; padding: 20px;
   }
-  #toast.show { transform: translateX(-50%) translateY(0); }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+    padding: 28px; width: 100%; max-width: 520px;
+    animation: modalIn 0.25s cubic-bezier(0.16,1,0.3,1);
+  }
+  @keyframes modalIn { from { opacity:0; transform:translateY(12px) scale(0.97); } to { opacity:1; transform:none; } }
+  .modal h2 { font-size: 16px; margin-bottom: 8px; }
+  .modal p  { font-size: 13px; color: var(--muted); margin-bottom: 16px; line-height: 1.5; }
+  .import-textarea {
+    width: 100%; height: 180px; background: var(--bg); border: 1px solid var(--border);
+    border-radius: 10px; padding: 12px; color: var(--text); font-size: 13px;
+    font-family: 'SF Mono', 'Fira Code', monospace; resize: vertical; outline: none; line-height: 1.6;
+  }
+  .import-textarea:focus { border-color: var(--border-hover); }
+  .modal-footer { display: flex; gap: 10px; margin-top: 16px; justify-content: flex-end; }
 
   /* ── Empty state ── */
-  .empty-state {
-    display: none;
-    grid-column: 1/-1;
-    text-align: center;
-    padding: 60px 20px;
-    color: var(--muted);
-    font-size: 14px;
+  .empty-state { display: none; grid-column: 1/-1; text-align: center; padding: 60px 20px; color: var(--muted); font-size: 14px; }
+
+  /* ── Toast ── */
+  #toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 50px;
+    padding: 10px 20px; font-size: 13px; color: var(--text); z-index: 500;
+    transition: transform 0.3s cubic-bezier(0.16,1,0.3,1); white-space: nowrap; pointer-events: none;
   }
+  #toast.show { transform: translateX(-50%) translateY(0); }
 </style>
 </head>
 <body>
@@ -331,33 +196,31 @@
   </div>
   <div class="controls">
     <div class="search-wrap">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-      </svg>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
       <input class="search-input" type="text" id="searchInput" placeholder="Szukaj kodu lub #nr…" oninput="filterSlots()">
     </div>
     <button class="btn" onclick="openImport()">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
-      </svg>
-      Importuj listę
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      Importuj
     </button>
-    <button class="btn primary" onclick="exportJson()" style="background:#a8f0c6;color:#000;border-color:transparent">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
-      </svg>
+    <button class="btn green" onclick="exportJson()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
       Pobierz codes.json
     </button>
+    <button class="btn" onclick="generateScanPage()" title="Generuje nfc-scan.html z wbudowanymi kluczami JSONBin">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      Generuj nfc-scan.html
+    </button>
+    <input type="file" id="scanFileInput" accept=".html" style="display:none" onchange="onScanFileSelected(this)">
     <button class="btn primary" onclick="saveAll()">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/>
-      </svg>
-      Zapisz wszystko
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+      Zapisz
     </button>
     <button class="btn danger" onclick="clearAll()">Wyczyść</button>
   </div>
 </header>
 
+<!-- Stats -->
 <div class="stats">
   <div class="stat">
     <span class="stat-num filled" id="statFilled">0</span>
@@ -368,9 +231,35 @@
     <span style="color:var(--muted)">pustych</span>
   </div>
   <div class="stat">
-    <span style="color:var(--muted)">URL do NFC:</span>
-    <span id="baseUrlDisplay" style="font-size:11px;color:rgba(255,255,255,0.45);font-family:monospace"></span>
+    <span class="stat-num" id="statScanned" style="color:var(--orange)">0</span>
+    <span style="color:var(--muted)">zeskanowanych dziś</span>
   </div>
+  <button class="btn" style="margin-left:auto;font-size:11px;padding:5px 12px" onclick="loadScans()">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+    Odśwież skany
+  </button>
+</div>
+
+<!-- JSONBin setup -->
+<div class="jb-bar">
+  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--green);flex-shrink:0"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+  <label>JSONBin API Key:</label>
+  <input class="jb-input" id="jbKey" type="password" placeholder="$2a$10$..." style="width:200px" oninput="saveJbConfig()" value="">
+  <label>Bin ID:</label>
+  <input class="jb-input" id="jbBin" type="text" placeholder="6123abc..." style="width:160px" oninput="saveJbConfig()" value="">
+  <button class="btn" style="font-size:11px;padding:5px 12px" onclick="createBin()">Utwórz nowy Bin</button>
+  <span class="jb-status" id="jbStatus">Nie skonfigurowano</span>
+  <span style="color:var(--muted);font-size:11px">→ jsonbin.io (darmowe)</span>
+</div>
+
+<!-- URL bar -->
+<div class="url-bar">
+  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--muted);flex-shrink:0"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+  <label>Adres strony (GitHub Pages):</label>
+  <input class="url-input" id="baseUrlInput" type="text"
+    placeholder="https://okosovy123-source.github.io/NFC-CARD/nfc-scan.html"
+    oninput="saveBaseUrl(this.value)">
+  <span style="font-size:11px;color:rgba(255,255,255,0.25)">(kopiowany do NFC)</span>
 </div>
 
 <div class="grid-wrap">
@@ -383,7 +272,7 @@
 <div class="modal-overlay" id="importModal">
   <div class="modal">
     <h2>Importuj kody</h2>
-    <p>Wklej kody — jeden na linię. Zostaną przypisane kolejno do kart 1, 2, 3… Puste linie są pomijane.</p>
+    <p>Wklej kody — jeden na linię. Zostaną przypisane kolejno do kart 1, 2, 3…</p>
     <textarea class="import-textarea" id="importText" placeholder="KOD001&#10;KOD002&#10;KOD003&#10;…"></textarea>
     <div class="modal-footer">
       <button class="btn" onclick="closeImport()">Anuluj</button>
@@ -395,21 +284,145 @@
 <div id="toast"></div>
 
 <script>
-  const BASE_URL = window.location.origin + window.location.pathname.replace('nfc-admin.html', 'nfc-scan.html');
   const STORAGE_KEY = 'nfc_codes';
+  const URL_KEY     = 'nfc_base_url';
+  const JB_KEY_K    = 'jb_api_key';
+  const JB_KEY_B    = 'jb_bin_id';
+  const DEFAULT_URL = 'https://okosovy123-source.github.io/NFC-CARD/nfc-scan.html';
 
-  document.getElementById('baseUrlDisplay').textContent = BASE_URL + '?id=';
-
-  // ── State ──
   let codes = load();
+  let scanData = {}; // { "1": {count, last}, ... }
 
+  // ── Init ──
+  document.getElementById('baseUrlInput').value = getBaseUrl();
+  document.getElementById('jbKey').value = localStorage.getItem(JB_KEY_K) || '';
+  document.getElementById('jbBin').value = localStorage.getItem(JB_KEY_B) || '';
+  updateJbStatus();
+
+  // ── Base URL ──
+  function getBaseUrl() {
+    return localStorage.getItem(URL_KEY) || DEFAULT_URL;
+  }
+  function saveBaseUrl(val) {
+    localStorage.setItem(URL_KEY, val.trim() || DEFAULT_URL);
+    document.querySelectorAll('.slot-link').forEach(a => {
+      const id = a.dataset.cardId;
+      if (id) a.href = getBaseUrl() + '?id=' + id;
+    });
+  }
+
+  // ── JSONBin config ──
+  function getJbKey() { return document.getElementById('jbKey').value.trim(); }
+  function getJbBin() { return document.getElementById('jbBin').value.trim(); }
+
+  function saveJbConfig() {
+    localStorage.setItem(JB_KEY_K, getJbKey());
+    localStorage.setItem(JB_KEY_B, getJbBin());
+    updateJbStatus();
+  }
+
+  function updateJbStatus() {
+    const el = document.getElementById('jbStatus');
+    if (getJbKey() && getJbBin()) {
+      el.textContent = '✓ Skonfigurowano';
+      el.className = 'jb-status ok';
+    } else {
+      el.textContent = 'Nie skonfigurowano';
+      el.className = 'jb-status';
+    }
+  }
+
+  // ── Create new Bin ──
+  async function createBin() {
+    const key = getJbKey();
+    if (!key) { toast('Najpierw wpisz API Key ↑'); return; }
+    const el = document.getElementById('jbStatus');
+    el.textContent = 'Tworzę...'; el.className = 'jb-status';
+    try {
+      const r = await fetch('https://api.jsonbin.io/v3/b', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Master-Key': key,
+          'X-Bin-Name': 'NFC-Scans',
+          'X-Bin-Private': 'false'
+        },
+        body: JSON.stringify({ scans: {} })
+      });
+      const data = await r.json();
+      if (data.metadata?.id) {
+        document.getElementById('jbBin').value = data.metadata.id;
+        localStorage.setItem(JB_KEY_B, data.metadata.id);
+        updateJbStatus();
+        toast('Bin utworzony: ' + data.metadata.id);
+      } else {
+        throw new Error(data.message || 'Błąd');
+      }
+    } catch(e) {
+      el.textContent = 'Błąd: ' + e.message; el.className = 'jb-status err';
+    }
+  }
+
+  // ── Load scans from JSONBin ──
+  async function loadScans() {
+    const key = getJbKey(), bin = getJbBin();
+    if (!key || !bin) { toast('Skonfiguruj JSONBin ↑'); return; }
+
+    const el = document.getElementById('jbStatus');
+    el.textContent = 'Ładuję...'; el.className = 'jb-status';
+
+    try {
+      const r = await fetch(`https://api.jsonbin.io/v3/b/${bin}/latest`, {
+        headers: { 'X-Master-Key': key }
+      });
+      const data = await r.json();
+      scanData = data.record?.scans || {};
+      renderScanBadges();
+      el.textContent = '✓ Skonfigurowano'; el.className = 'jb-status ok';
+
+      // Policz dzisiejsze skany
+      const today = new Date().toDateString();
+      let todayCount = 0;
+      for (const info of Object.values(scanData)) {
+        if (info.last && new Date(info.last).toDateString() === today) todayCount++;
+      }
+      document.getElementById('statScanned').textContent = todayCount;
+
+    } catch(e) {
+      el.textContent = 'Błąd połączenia'; el.className = 'jb-status err';
+    }
+  }
+
+  function renderScanBadges() {
+    for (let i = 1; i <= 100; i++) {
+      const badge = document.getElementById(`badge-${i}`);
+      if (!badge) continue;
+      const info = scanData[String(i)];
+      if (info && info.count > 0) {
+        const d = new Date(info.last);
+        const dateStr = d.toLocaleDateString('pl-PL', { day:'2-digit', month:'2-digit' })
+          + ' ' + d.toLocaleTimeString('pl-PL', { hour:'2-digit', minute:'2-digit' });
+        badge.className = 'scan-badge scanned';
+        badge.innerHTML = `
+          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          <span class="scan-count">${info.count}×</span> ostatnio ${dateStr}`;
+      } else {
+        badge.className = 'scan-badge';
+        badge.innerHTML = `
+          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>
+          Nie zeskanowano`;
+      }
+    }
+  }
+
+  // ── Codes ──
   function load() {
     try {
       const s = localStorage.getItem(STORAGE_KEY);
       const obj = s ? JSON.parse(s) : {};
-      const result = {};
-      for (let i = 1; i <= 100; i++) result[i] = obj[i] || '';
-      return result;
+      const r = {};
+      for (let i = 1; i <= 100; i++) r[i] = obj[i] || '';
+      return r;
     } catch {
       const r = {};
       for (let i = 1; i <= 100; i++) r[i] = '';
@@ -422,18 +435,13 @@
     updateStats();
   }
 
-  function saveAll() {
-    collectInputs();
-    save();
-    toast('Zapisano wszystkie kody ✓');
-  }
+  function saveAll() { collectInputs(); save(); toast('Zapisano ✓'); }
 
   function collectInputs() {
     document.querySelectorAll('.slot-input').forEach(inp => {
       const id = parseInt(inp.dataset.id);
       codes[id] = inp.value.trim();
-      const slot = inp.closest('.slot');
-      slot.classList.toggle('has-code', !!codes[id]);
+      inp.closest('.slot').classList.toggle('has-code', !!codes[id]);
     });
   }
 
@@ -448,11 +456,17 @@
     toast('Wyczyszczono');
   }
 
-  // ── Render grid ──
+  function updateStats() {
+    let filled = 0;
+    for (let i = 1; i <= 100; i++) if (codes[i]) filled++;
+    document.getElementById('statFilled').textContent = filled;
+    document.getElementById('statEmpty').textContent = 100 - filled;
+  }
+
+  // ── Grid ──
   function buildGrid() {
     const grid = document.getElementById('grid');
     grid.innerHTML = '<div class="empty-state" id="emptyState">Brak wyników wyszukiwania</div>';
-
     for (let i = 1; i <= 100; i++) {
       const slot = document.createElement('div');
       slot.className = 'slot' + (codes[i] ? ' has-code' : '');
@@ -462,36 +476,31 @@
           <span class="slot-num">KARTA #${String(i).padStart(3,'0')}</span>
           <span class="slot-status"></span>
         </div>
-        <input
-          class="slot-input"
-          type="text"
-          data-id="${i}"
-          value="${escHtml(codes[i])}"
-          placeholder="Wpisz kod…"
-          oninput="onInput(this)"
-          onblur="onBlur(this)"
-        >
+        <input class="slot-input" type="text" data-id="${i}"
+          value="${escHtml(codes[i])}" placeholder="Wpisz kod…"
+          oninput="onInput(this)" onblur="onBlur(this)">
+        <div class="scan-badge" id="badge-${i}">
+          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>
+          Nie zeskanowano
+        </div>
         <div class="slot-actions">
-          <a class="slot-link" href="${BASE_URL}?id=${i}" target="_blank">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
-            </svg>
+          <a class="slot-link" data-card-id="${i}" href="${getBaseUrl()}?id=${i}" target="_blank">
+            <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
             Podgląd
           </a>
           <button class="slot-copy-link" onclick="copyLink(${i}, this)">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-            </svg>
+            <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
             Kopiuj URL
           </button>
         </div>`;
       grid.appendChild(slot);
     }
     updateStats();
+    if (getJbKey() && getJbBin()) loadScans();
   }
 
   function escHtml(s) {
-    return (s || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    return (s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
 
   function onInput(inp) {
@@ -500,18 +509,9 @@
     inp.closest('.slot').classList.toggle('has-code', !!codes[id]);
     updateStats();
   }
-
   function onBlur(inp) {
-    const id = parseInt(inp.dataset.id);
-    codes[id] = inp.value.trim();
+    codes[parseInt(inp.dataset.id)] = inp.value.trim();
     save();
-  }
-
-  function updateStats() {
-    let filled = 0;
-    for (let i = 1; i <= 100; i++) if (codes[i]) filled++;
-    document.getElementById('statFilled').textContent = filled;
-    document.getElementById('statEmpty').textContent = 100 - filled;
   }
 
   // ── Search ──
@@ -521,9 +521,7 @@
     for (let i = 1; i <= 100; i++) {
       const slot = document.getElementById(`slot-${i}`);
       if (!slot) continue;
-      const matchNum = String(i).includes(q) || `#${String(i).padStart(3,'0')}`.includes(q);
-      const matchCode = codes[i].toLowerCase().includes(q);
-      const show = !q || matchNum || matchCode;
+      const show = !q || String(i).includes(q) || `#${String(i).padStart(3,'0')}`.includes(q) || codes[i].toLowerCase().includes(q);
       slot.classList.toggle('hidden-slot', !show);
       if (show) visible++;
     }
@@ -532,80 +530,80 @@
 
   // ── Copy link ──
   function copyLink(id, btn) {
-    const url = `${BASE_URL}?id=${id}`;
+    const url = `${getBaseUrl()}?id=${id}`;
     navigator.clipboard.writeText(url).then(() => {
       btn.classList.add('ok');
       const orig = btn.innerHTML;
-      btn.innerHTML = `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Skopiowano`;
+      btn.innerHTML = `<svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Skopiowano`;
       setTimeout(() => { btn.classList.remove('ok'); btn.innerHTML = orig; }, 1800);
     });
   }
 
   // ── Import ──
-  function openImport() {
-    document.getElementById('importModal').classList.add('open');
-    document.getElementById('importText').focus();
-  }
-  function closeImport() {
-    document.getElementById('importModal').classList.remove('open');
-  }
+  function openImport() { document.getElementById('importModal').classList.add('open'); document.getElementById('importText').focus(); }
+  function closeImport() { document.getElementById('importModal').classList.remove('open'); }
   function doImport() {
-    const lines = document.getElementById('importText').value
-      .split('\n')
-      .map(l => l.trim())
-      .filter(l => l.length > 0);
+    const lines = document.getElementById('importText').value.split('\n').map(l=>l.trim()).filter(l=>l.length>0);
     let idx = 1;
     for (const line of lines) {
       if (idx > 100) break;
       codes[idx] = line;
       const inp = document.querySelector(`.slot-input[data-id="${idx}"]`);
-      if (inp) {
-        inp.value = line;
-        inp.closest('.slot').classList.add('has-code');
-      }
+      if (inp) { inp.value = line; inp.closest('.slot').classList.add('has-code'); }
       idx++;
     }
-    save();
-    closeImport();
-    document.getElementById('importText').value = '';
-    toast(`Zaimportowano ${lines.length > 100 ? 100 : lines.length} kodów ✓`);
+    save(); closeImport(); document.getElementById('importText').value = '';
+    toast(`Zaimportowano ${Math.min(lines.length,100)} kodów ✓`);
   }
 
-  // ── Export codes.json (wgraj na GitHub zamiast starego pliku) ──
+  // ── Generuj nfc-scan.html z wbudowanymi kluczami JSONBin ──
+  function generateScanPage() {
+    const key = getJbKey(), bin = getJbBin();
+    if (!key || !bin) { toast('Najpierw skonfiguruj JSONBin ↑'); return; }
+    // Otwórz file picker — użytkownik wybiera lokalny nfc-scan.html
+    document.getElementById('scanFileInput').click();
+  }
+
+  function onScanFileSelected(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const key = getJbKey(), bin = getJbBin();
+    const reader = new FileReader();
+    reader.onload = e => {
+      let html = e.target.result;
+      html = html.replace("'%%JSONBIN_KEY%%'", `'${key}'`);
+      html = html.replace("'%%JSONBIN_BIN%%'", `'${bin}'`);
+      const blob = new Blob([html], { type: 'text/html' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'nfc-scan.html';
+      a.click();
+      toast('Pobrano nfc-scan.html → wgraj na GitHub ✓');
+    };
+    reader.readAsText(file);
+    input.value = ''; // reset żeby można było wybrać ten sam plik znowu
+  }
+
+  // ── Export codes.json ──
   function exportJson() {
     collectInputs();
     const obj = {};
     for (let i = 1; i <= 100; i++) obj[String(i)] = codes[i] || '';
     const blob = new Blob([JSON.stringify(obj, null, 2)], { type: 'application/json' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'codes.json';
-    a.click();
-    toast('Pobrano codes.json — wgraj go na GitHub ✓');
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'codes.json'; a.click();
+    toast('Pobrano codes.json → wgraj na GitHub ✓');
   }
 
   // ── Toast ──
   function toast(msg) {
     const el = document.getElementById('toast');
-    el.textContent = msg;
-    el.classList.add('show');
-    setTimeout(() => el.classList.remove('show'), 2200);
+    el.textContent = msg; el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 2400);
   }
 
-  // ── Close modal on outside click ──
-  document.getElementById('importModal').addEventListener('click', e => {
-    if (e.target === e.currentTarget) closeImport();
-  });
+  document.getElementById('importModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeImport(); });
+  document.addEventListener('keydown', e => { if ((e.metaKey||e.ctrlKey) && e.key==='s') { e.preventDefault(); saveAll(); } });
 
-  // ── Keyboard shortcut: Cmd/Ctrl+S = save ──
-  document.addEventListener('keydown', e => {
-    if ((e.metaKey || e.ctrlKey) && e.key === 's') {
-      e.preventDefault();
-      saveAll();
-    }
-  });
-
-  // ── Boot ──
   buildGrid();
 </script>
 </body>
