@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Kod karty</title>
+<title>Kod karty — DESIRED</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -17,16 +17,30 @@
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    position: relative;
   }
 
+  /* ── Ambient glow ── */
   .ambient {
     position: fixed;
     inset: 0;
-    background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(255,255,255,0.03) 0%, transparent 70%);
+    background: radial-gradient(ellipse 70% 50% at 50% 50%, rgba(255,255,255,0.04) 0%, transparent 70%);
     pointer-events: none;
   }
 
+  /* ── Logo ── */
+  .brand-logo {
+    position: fixed;
+    top: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 28px;
+    width: auto;
+    filter: invert(1);
+    opacity: 0.85;
+    object-fit: contain;
+  }
+
+  /* ── NFC rings ── */
   .rings-wrap {
     position: relative;
     width: 220px;
@@ -43,193 +57,258 @@
     animation: ringPulse 2.4s ease-out infinite;
     opacity: 0;
   }
-  .ring:nth-child(1) { width: 90px;  height: 90px;  animation-delay: 0s; }
-  .ring:nth-child(2) { width: 140px; height: 140px; animation-delay: 0.4s; }
-  .ring:nth-child(3) { width: 190px; height: 190px; animation-delay: 0.8s; }
-  .ring:nth-child(4) { width: 240px; height: 240px; animation-delay: 1.2s; }
+  .ring:nth-child(1) { width: 80px;  height: 80px;  animation-delay: 0s; }
+  .ring:nth-child(2) { width: 130px; height: 130px; animation-delay: 0.45s; }
+  .ring:nth-child(3) { width: 180px; height: 180px; animation-delay: 0.9s; }
+  .ring:nth-child(4) { width: 230px; height: 230px; animation-delay: 1.35s; }
 
   @keyframes ringPulse {
-    0%   { transform: scale(0.7); opacity: 0; border-color: rgba(255,255,255,0.4); }
-    30%  { opacity: 1; }
-    100% { transform: scale(1.1); opacity: 0; border-color: rgba(255,255,255,0.0); }
+    0%   { transform: scale(0.75); opacity: 0; border-color: rgba(255,255,255,0.5); }
+    25%  { opacity: 1; }
+    100% { transform: scale(1.05); opacity: 0; border-color: rgba(255,255,255,0); }
   }
 
-  .nfc-icon { width: 64px; height: 64px; position: relative; z-index: 2; }
-  .nfc-icon svg { width: 100%; height: 100%; filter: drop-shadow(0 0 12px rgba(255,255,255,0.3)); }
+  /* ── Card icon ── */
+  .card-icon {
+    width: 54px;
+    height: 54px;
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .card-icon img {
+    width: 42px;
+    height: 42px;
+    filter: invert(1);
+    opacity: 0.9;
+    object-fit: contain;
+  }
 
   .scan-label {
-    margin-top: 32px;
-    font-size: 13px;
-    letter-spacing: 0.2em;
+    margin-top: 36px;
+    font-size: 11px;
+    letter-spacing: 0.28em;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.35);
-    animation: fadePulse 1.8s ease-in-out infinite;
+    color: rgba(255,255,255,0.3);
+    animation: fadePulse 2s ease-in-out infinite;
   }
 
   @keyframes fadePulse {
-    0%, 100% { opacity: 0.4; }
-    50% { opacity: 1; }
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.8; }
   }
 
+  /* ── Scan phase ── */
   #phase-scan {
     display: flex;
     flex-direction: column;
     align-items: center;
-    transition: opacity 0.5s ease;
+    transition: opacity 0.6s ease;
   }
 
+  /* ── Reveal phase ── */
   #phase-reveal {
     display: none;
     flex-direction: column;
     align-items: center;
-    gap: 28px;
-    animation: revealIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    gap: 24px;
+    padding: 0 24px;
+    width: 100%;
+    max-width: 380px;
+    animation: revealIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
 
   @keyframes revealIn {
-    from { opacity: 0; transform: translateY(24px) scale(0.96); }
+    from { opacity: 0; transform: translateY(28px) scale(0.95); }
     to   { opacity: 1; transform: translateY(0) scale(1); }
   }
 
-  .card-badge {
-    font-size: 11px;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.3);
-  }
-
-  .code-box {
-    position: relative;
-    padding: 28px 44px;
-    border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 18px;
-    background: rgba(255,255,255,0.04);
-    text-align: center;
-    overflow: hidden;
-  }
-
-  .code-box::before {
-    content: '';
-    position: absolute;
-    top: 0; left: -100%;
-    width: 60%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.07), transparent);
-    animation: shimmer 2.5s 0.3s ease-in-out infinite;
-  }
-
-  @keyframes shimmer {
-    0%   { left: -100%; }
-    100% { left: 160%; }
-  }
-
-  .code-value {
-    font-size: clamp(28px, 8vw, 42px);
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    color: #fff;
-    font-variant-numeric: tabular-nums;
-    animation: glitchReveal 0.5s 0.1s both;
-  }
-
-  @keyframes glitchReveal {
-    0%  { clip-path: inset(100% 0 0 0); opacity: 0; }
-    40% { clip-path: inset(0% 0 60% 0); opacity: 1; }
-    60% { clip-path: inset(40% 0 0% 0); }
-    80% { clip-path: inset(0% 0 10% 0); }
-    100%{ clip-path: inset(0% 0 0% 0); opacity: 1; }
-  }
-
-  .code-label {
-    margin-top: 8px;
-    font-size: 11px;
-    letter-spacing: 0.18em;
+  .reveal-label {
+    font-size: 10px;
+    letter-spacing: 0.3em;
     text-transform: uppercase;
     color: rgba(255,255,255,0.25);
   }
 
-  .copy-btn {
+  /* ── Code box ── */
+  .code-box {
+    position: relative;
+    width: 100%;
+    padding: 32px 40px 28px;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    background: rgba(255,255,255,0.03);
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .code-box::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+    animation: shimmer 3s 0.5s ease-in-out infinite;
+  }
+
+  @keyframes shimmer {
+    0%   { left: -60%; }
+    100% { left: 160%; }
+  }
+
+  .code-value {
+    font-size: clamp(30px, 9vw, 46px);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: #fff;
+    font-variant-numeric: tabular-nums;
+    animation: glitchReveal 0.6s 0.05s both;
+  }
+
+  @keyframes glitchReveal {
+    0%  { clip-path: inset(100% 0 0 0); opacity: 0; }
+    35% { clip-path: inset(0% 0 65% 0); opacity: 1; }
+    55% { clip-path: inset(35% 0 0% 0); }
+    75% { clip-path: inset(0% 0 15% 0); }
+    100%{ clip-path: inset(0); opacity: 1; }
+  }
+
+  .code-sublabel {
+    margin-top: 10px;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.2);
+  }
+
+  /* ── Actions ── */
+  .actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .btn-blindbox {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 50px;
-    padding: 12px 28px;
+    background: #fff;
+    color: #000;
+    border: none;
+    border-radius: 14px;
+    padding: 16px 24px;
     font-size: 14px;
-    color: rgba(255,255,255,0.7);
-    letter-spacing: 0.05em;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
     cursor: pointer;
-    transition: all 0.2s ease;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.15s;
     -webkit-tap-highlight-color: transparent;
   }
-  .copy-btn:active { background: rgba(255,255,255,0.15); transform: scale(0.97); }
-  .copy-btn.copied { color: #a8f0c6; border-color: rgba(168,240,198,0.3); background: rgba(168,240,198,0.06); }
+  .btn-blindbox:active { opacity: 0.85; transform: scale(0.98); }
 
-  .chip { font-size: 11px; color: rgba(255,255,255,0.2); letter-spacing: 0.12em; margin-top: 16px; }
+  .btn-copy {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 14px;
+    padding: 14px 24px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn-copy:active { background: rgba(255,255,255,0.06); transform: scale(0.98); }
+  .btn-copy.copied { color: #a8f0c6; border-color: rgba(168,240,198,0.25); }
 
+  .card-num {
+    font-size: 10px;
+    color: rgba(255,255,255,0.15);
+    letter-spacing: 0.15em;
+    margin-top: 8px;
+  }
+
+  /* ── Error ── */
   #phase-error {
     display: none;
     flex-direction: column;
     align-items: center;
-    gap: 16px;
+    gap: 14px;
     text-align: center;
     padding: 0 40px;
   }
-  .error-icon { font-size: 40px; opacity: 0.5; }
+  .error-icon { font-size: 36px; opacity: 0.4; }
   .error-title { font-size: 17px; font-weight: 500; }
-  .error-sub { font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5; }
-
-  .logo-mark { position: fixed; top: 28px; left: 28px; opacity: 0.2; }
-  .logo-mark svg { width: 28px; height: 28px; }
+  .error-sub { font-size: 13px; color: rgba(255,255,255,0.3); line-height: 1.6; }
 </style>
 </head>
 <body>
 
 <div class="ambient"></div>
 
-<div class="logo-mark">
-  <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="20" cy="20" r="18" stroke="white" stroke-width="1.5"/>
-    <path d="M12 20 C12 14 28 14 28 20 C28 26 12 26 12 20Z" stroke="white" stroke-width="1.5" fill="none"/>
-  </svg>
-</div>
+<!-- Logo centered top -->
+<img
+  class="brand-logo"
+  src="https://desired.studio/cdn/shop/files/czarne_logo.png?v=1766258696&width=400"
+  alt="DESIRED"
+  onerror="this.style.display='none'"
+>
 
+<!-- FAZA 1: skanowanie -->
 <div id="phase-scan">
   <div class="rings-wrap">
     <div class="ring"></div>
     <div class="ring"></div>
     <div class="ring"></div>
     <div class="ring"></div>
-    <div class="nfc-icon">
-      <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M20 32 C20 24 28 18 32 18" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.4"/>
-        <path d="M14 32 C14 20 23 12 32 12" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.6"/>
-        <path d="M8 32 C8 16 18 6 32 6"  stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.85"/>
-        <rect x="22" y="20" width="20" height="34" rx="3.5" stroke="white" stroke-width="2" fill="none"/>
-        <rect x="26" y="22.5" width="12" height="20" rx="1.5" stroke="white" stroke-width="1.2" fill="none" opacity="0.4"/>
-        <circle cx="32" cy="48" r="1.5" fill="white" opacity="0.6"/>
-      </svg>
+    <div class="card-icon">
+      <!-- Logo w centrum animacji -->
+      <img
+        src="https://desired.studio/cdn/shop/files/czarne_logo.png?v=1766258696&width=200"
+        alt=""
+        onerror="this.style.display='none'"
+      >
     </div>
   </div>
   <p class="scan-label">Odczytywanie karty</p>
 </div>
 
+<!-- FAZA 2: kod -->
 <div id="phase-reveal">
-  <p class="card-badge">Twój kod</p>
+  <p class="reveal-label">Twój kod dostępu</p>
+
   <div class="code-box">
     <div class="code-value" id="codeValue">—</div>
-    <div class="code-label">Zachowaj ten kod</div>
+    <div class="code-sublabel">Wpisz ten kod na stronie Blindbox</div>
   </div>
-  <button class="copy-btn" id="copyBtn" onclick="copyCode()">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-    </svg>
-    Kopiuj kod
-  </button>
-  <p class="chip" id="cardChip"></p>
+
+  <div class="actions">
+    <a class="btn-blindbox" href="https://desired.studio/pages/blindbox" target="_blank">
+      Przejdź do Blindbox →
+    </a>
+    <button class="btn-copy" id="copyBtn" onclick="copyCode()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+      </svg>
+      Kopiuj kod
+    </button>
+  </div>
+
+  <p class="card-num" id="cardChip"></p>
 </div>
 
+<!-- FAZA 3: błąd -->
 <div id="phase-error">
   <div class="error-icon">⊗</div>
   <p class="error-title">Nie znaleziono kodu</p>
@@ -238,8 +317,8 @@
 
 <script>
   function getCardId() {
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get('id') || params.get('card') || params.get('k');
+    const p = new URLSearchParams(window.location.search);
+    const id = p.get('id') || p.get('card') || p.get('k');
     return id ? parseInt(id, 10) : null;
   }
 
@@ -249,35 +328,36 @@
     navigator.clipboard.writeText(code).then(() => {
       const btn = document.getElementById('copyBtn');
       btn.classList.add('copied');
-      btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Skopiowano!`;
+      btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Skopiowano`;
       setTimeout(() => {
         btn.classList.remove('copied');
-        btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Kopiuj kod`;
+        btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Kopiuj kod`;
       }, 2200);
     });
   }
 
   function showReveal(code, cardId) {
     document.getElementById('codeValue').textContent = code;
-    document.getElementById('cardChip').textContent = `Karta #${String(cardId).padStart(3, '0')}`;
+    document.getElementById('cardChip').textContent = `Karta #${String(cardId).padStart(3,'0')}`;
     setTimeout(() => {
-      document.getElementById('phase-scan').style.opacity = '0';
-      document.getElementById('phase-scan').style.pointerEvents = 'none';
+      const scan = document.getElementById('phase-scan');
+      scan.style.opacity = '0';
+      scan.style.pointerEvents = 'none';
       setTimeout(() => {
-        document.getElementById('phase-scan').style.display = 'none';
-        const rev = document.getElementById('phase-reveal');
-        rev.style.display = 'flex';
-      }, 500);
+        scan.style.display = 'none';
+        document.getElementById('phase-reveal').style.display = 'flex';
+      }, 600);
     }, 1800);
   }
 
   function showError() {
     setTimeout(() => {
-      document.getElementById('phase-scan').style.opacity = '0';
+      const scan = document.getElementById('phase-scan');
+      scan.style.opacity = '0';
       setTimeout(() => {
-        document.getElementById('phase-scan').style.display = 'none';
+        scan.style.display = 'none';
         document.getElementById('phase-error').style.display = 'flex';
-      }, 500);
+      }, 600);
     }, 1800);
   }
 
@@ -285,12 +365,11 @@
     const cardId = getCardId();
     if (!cardId || cardId < 1 || cardId > 100) { showError(); return; }
 
-    // Pobiera codes.json z tego samego folderu na GitHubie
     fetch('./codes.json')
       .then(r => r.json())
       .then(codes => {
         const code = codes[String(cardId)];
-        if (!code || code.trim() === '') { showError(); return; }
+        if (!code || !code.trim()) { showError(); return; }
         showReveal(code.trim(), cardId);
       })
       .catch(() => showError());
